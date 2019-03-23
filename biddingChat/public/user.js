@@ -24,7 +24,7 @@ document.getElementById("sellerBtn").addEventListener("click", () => {
 
 function connectIO() {
   if (user) {
-    socket = io.connect("http://localhost:3000");
+    socket = io.connect("http://139.59.90.174:3001");
     if (user == "Buyer") {
       socket.on("getSellers", data => {
         console.log(data.sellers);
