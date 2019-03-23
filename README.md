@@ -1,6 +1,6 @@
 # Team-36
 
-Our solution is live [here]()
+Our solution is live [here](http://139.59.90.174:3000/)
 
 ## Topic - Agriculture
 
@@ -19,6 +19,7 @@ We have made an assistant for every farmer where he gets local weather data in r
 * Implementing a real-time bidding platform using **socket.io** where farmers can put up their crops and interested buyers can bid for the same. Once the farmer is satisfied with the price, he can select the highest bidder and they are then redirected to a private chat application where they can iron out the logistics.
   
   >[**_/bidding/_**](https://github.com/vinnovateit/Team-36/tree/master/bidding)
+  >[Real Time Bidding and Chat Portal](http://139.59.90.174:3001/)
 ## Team Members
 * Yash Mehrotra 17BIT0277 [Github Profile](https://github.com/yashmeh)
 * Aditya Chandak 17BIT0003 [Github Profile](https://github.com/adityachandak287)
