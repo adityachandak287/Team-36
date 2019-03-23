@@ -1,12 +1,13 @@
 var express = require("express");
 var app = express();
-var server = app.listen(3000);
+var server = app.listen(3001);
 app.use(express.static("public"));
-console.log("Server is running");
+console.log(`Server is running at ${3001}`);
 var socket = require("socket.io");
 var io = socket(server);
 var sellers = [];
 var bidLogs = {};
+var chatRooms = {};
 io.sockets.on("connection", socket => {
   socket.emit("getSellers", { sellers: sellers });
   socket.on("createSeller", data => {
@@ -36,5 +37,37 @@ io.sockets.on("connection", socket => {
     );
     io.in(data.bid.seller).emit("newBid", data);
     bidLogs[data.bid.seller].push(data.bid);
+  });
+
+  socket.on("buyerChoose", data => {
+    const killData = { buyer: data.buyer.buyer, seller: socket.id };
+    const saleData = {
+      buyer: killData.buyer,
+      seller: killData.seller,
+      bid: data.buyer.bid,
+      room: "chat" + killData.buyer + killData.seller
+    };
+
+    io.in(data.room).emit("endSession", saleData);
+    console.log(`Buyer ${saleData.buyer} Seller ${saleData.seller}`);
+    io.to(`${saleData.buyer}`).emit("enterChatMode", saleData);
+    socket.emit("enterChatMode", saleData);
+    if (!saleData.room in chatRooms) {
+      chatRooms[saleData.room] = saleData;
+    }
+  });
+
+  socket.on("connectMe", room => {
+    socket.join(room);
+    console.log(`${socket.id} connected to chat room ${room}`);
+  });
+  //Disconnect all buyers except highest bidder and seller
+  socket.on("killMe", data => {
+    socket.leave(data);
+  });
+
+  //Chat events
+  socket.on("newMessage", data => {
+    console.log(data);
   });
 });

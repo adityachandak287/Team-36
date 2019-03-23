@@ -16,7 +16,9 @@
   </head>
   <body>
     <div class="container text-center" id="buttonDiv">
-      <h3>Hi, welcome to VinHack!</h3>
+      <div class="jumbotron p-3 m-4">
+        <h2>Hi, welcome to the Bazaar Bidding Portal!</h2>
+      </div>
       <table class="table">
         <tr>
           <td>
@@ -44,7 +46,6 @@
         </tr>
       </table>
     </div>
-    <hr />
     <div class="container" id="buyerDiv"></div>
     <div class="container" id="sellerDiv">
       <!-- <form method="post" action="signup.php">
@@ -85,46 +86,48 @@
       </form> -->
     </div>
     <div class="container" id="bidDiv">
-      <form class="form-inline" id="bidForm" style="text-align: center">
-        <table class="table">
-          <tr>
-            <td>
-              <div class="form-group">
-                <label>Bid Amount</label>
-              </div>
-            </td>
-            <td>
-              <div class="form-group">
-                <input
-                  type="amount"
-                  name="name"
-                  id="bidAmount"
-                  class="form-control"
-                  placeholder="Add Amount"
-                  required
-                />
-              </div>
-            </td>
-            <td>
-              <div class="form-group">
-                <input
-                  type="button"
-                  class="form-control btn btn-success"
-                  id="submitBid"
-                  value="Submit Bid!"
-                />
-              </div>
-            </td>
-          </tr>
-        </table>
-      </form>
-      <div class="table text-center">
+      <div class="container" id="formDiv">
+        <form class="form-inline" id="bidForm" style="text-align: center">
+          <table class="table">
+            <tr>
+              <td>
+                <div class="form-group">
+                  <label>Bid Amount</label>
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <input
+                    type="amount"
+                    name="name"
+                    id="bidAmount"
+                    class="form-control"
+                    placeholder="Add Amount"
+                  />
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <input
+                    type="button"
+                    class="form-control btn btn-success"
+                    id="submitBid"
+                    value="Submit Bid!"
+                  />
+                </div>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+
+      <div id="highestBidDiv" class="table text-center">
         <table width="100%">
           <tr>
             <td style="width: 70%">
               <h2 id="highestBid" class="text-center">Highest Bid:</h2>
             </td>
-            <td style="width: 30%">
+            <td id="chooseBuyerTd" style="width: 30%">
               <input
                 type="button"
                 class="btn btn-success"
@@ -136,6 +139,10 @@
         </table>
       </div>
       <div class="container" id="bidLog"></div>
+    </div>
+    <div class="container" id="chatDiv">
+      <h2>Welcome to Chat!</h2>
+      <div class="container" id="chatLog"></div>
     </div>
     <script
       src="http://code.jquery.com/jquery-3.3.1.min.js"

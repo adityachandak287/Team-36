@@ -5,26 +5,42 @@ let socket;
 let sellerRoom;
 let bidData = [];
 let highestBid;
-$().ready(() => {
-  // $("#sellerDiv").hide();
-  // $("#buyerDiv").hide();
-});
+let chatRoom;
+// $().ready(() => {
+//   $("#sellerDiv").hide();
+//   $("#buyerDiv").hide();
+//   $("#bidDiv").hide();
+//   $("#chatDiv").hide();
+//   $("#chooseBuyerTd").hide();
+// });
 document.getElementById("buyerBtn").addEventListener("click", () => {
   user = "Buyer";
-  $("#buyerDiv").slideDown();
   document.getElementById("sellerBtn").disabled = true;
+  document.getElementById("buyerBtn").disabled = true;
+  $("#buttonDiv").slideUp();
+  $("#buyerDiv").slideDown();
+  $("#bidDiv").slideDown();
   connectIO();
 });
 document.getElementById("sellerBtn").addEventListener("click", () => {
   user = "Seller";
+  document.getElementById("sellerBtn").disabled = true;
   document.getElementById("buyerBtn").disabled = true;
+  $("#buttonDiv").slideUp();
+  $("#formDiv").hide();
   $("#sellerDiv").slideDown();
+  $("#bidDiv").slideDown();
   connectIO();
+});
+document.getElementById("chooseBuyer").addEventListener("click", () => {
+  if (socket) {
+    socket.emit("buyerChoose", { buyer: highestBid, room: sellerRoom });
+  }
 });
 
 function connectIO() {
   if (user) {
-    socket = io.connect("http://localhost:3000");
+    socket = io.connect("http://localhost:3001");
     if (user == "Buyer") {
       socket.on("getSellers", data => {
         console.log(data.sellers);
@@ -44,10 +60,12 @@ function connectIO() {
           buyer: socket.id,
           bid: document.getElementById("bidAmount").value
         };
-        bidData.push(logData);
-        console.log(logData);
-        socket.emit("logBid", { bids: bidData, bid: logData });
-        document.getElementById("bidForm").reset();
+        if (logData.bid != "") {
+          bidData.push(logData);
+          console.log(logData);
+          socket.emit("logBid", { bids: bidData, bid: logData });
+          document.getElementById("bidForm").reset();
+        }
       });
       socket.on("newBid", data => {
         console.log("New Bid!");
@@ -55,7 +73,24 @@ function connectIO() {
         addBid(data.bid);
         console.log(data);
       });
+      socket.on("saleDone", data => {
+        console.log(`Sale done with ${data.seller}`);
+        $("#bidLog").slideUp();
+        $("#chatDiv").slideDown();
+      });
+      socket.on("endSession", data => {
+        if (socket.id != data.buyer && socket.id != data.seller) {
+          console.log(data);
+          window.location.href = "http://localhost:3001";
+          socket.emit("killMe", sellerRoom);
+        }
+      });
+      socket.on("enterChatMode", data => {
+        console.log("CHAT");
+        enterChatMode(data);
+      });
     } else if (user == "Seller") {
+      $("#chooseBuyerTd").fadeIn();
       socket.emit("createSeller", {
         name: "Seller" + Math.trunc(Math.random() * 100)
       });
@@ -69,10 +104,23 @@ function connectIO() {
         addBid(data.bid);
         console.log(data);
       });
+      socket.on("enterChatMode", data => {
+        console.log("CHAT");
+        enterChatMode(data);
+      });
     }
   }
 }
-
+function enterChatMode(data) {
+  socket.emit("connectMe", data.room);
+  chatRoom = data.room;
+  $("#bidLog").slideUp();
+  $("#formDiv").slideUp();
+  $("#buyerDiv").slideUp();
+  $("#sellerDiv").slideUp();
+  $("#highestBidDiv").slideUp();
+  $("#chatDiv").slideDown();
+}
 function addSellers(sellerData) {
   let sellerDiv = document.getElementById("buyerDiv");
   sellerData.forEach(seller => {
