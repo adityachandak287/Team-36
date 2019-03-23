@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <title>VinHack</title>
+  </head>
+  <body>
+    <div class="container text-center" id="buttonDiv">
+      <h3>Hi, welcome to VinHack!</h3>
+      <table class="table">
+        <tr>
+          <td>
+            <div class="container">
+              <input
+                type="button"
+                value="Buyer"
+                class="btn btn-lg btn-primary"
+                id="buyerBtn"
+                style="width: 50%"
+              />
+            </div>
+          </td>
+          <td>
+            <div class="container">
+              <input
+                type="button"
+                value="Seller"
+                class="btn btn-lg btn-primary"
+                id="sellerBtn"
+                style="width: 50%"
+              />
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <hr />
+    <div class="container" id="buyerDiv"></div>
+    <div class="container" id="sellerDiv">
+      <!-- <form method="post" action="signup.php">
+        <div class="form-group">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            class="form-control"
+            placeholder="Add Name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Crop</label>
+          <input
+            type="text"
+            name="crop"
+            class="form-control"
+            placeholder="Add Crop"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Quantity</label>
+          <input
+            type="text"
+            name="quantity"
+            class="form-control"
+            placeholder="Add Quantity"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-dark">Submit</button>
+      </form> -->
+    </div>
+    <div class="container" id="bidDiv">
+      <form class="form-inline" id="bidForm" style="text-align: center">
+        <table class="table">
+          <tr>
+            <td>
+              <div class="form-group">
+                <label>Bid Amount</label>
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <input
+                  type="amount"
+                  name="name"
+                  id="bidAmount"
+                  class="form-control"
+                  placeholder="Add Amount"
+                  required
+                />
+              </div>
+            </td>
+            <td>
+              <div class="form-group">
+                <input
+                  type="button"
+                  class="form-control btn btn-success"
+                  id="submitBid"
+                  value="Submit Bid!"
+                />
+              </div>
+            </td>
+          </tr>
+        </table>
+      </form>
+      <div class="table text-center">
+        <table width="100%">
+          <tr>
+            <td style="width: 70%">
+              <h2 id="highestBid" class="text-center">Highest Bid:</h2>
+            </td>
+            <td style="width: 30%">
+              <input
+                type="button"
+                class="btn btn-success"
+                id="chooseBuyer"
+                value="Sell!"
+              />
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="container" id="bidLog"></div>
+    </div>
+    <script
+      src="http://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script src="user.js"></script>
+  </body>
+</html>
