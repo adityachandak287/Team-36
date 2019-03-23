@@ -24,11 +24,11 @@ io.sockets.on("connection", socket => {
       console.log(`${socket.id} left room ${rooms[1]}`);
       socket.leave(rooms[1]);
     }
-    socket.join(data.seller);
+    socket.join(data.room);
 
     console.log(rooms);
-    socket.emit("getBids", bidLogs[data.seller]);
-    console.log(`${socket.id} joined room ${data.seller}`);
+    socket.emit("getBids", bidLogs[data.room]);
+    console.log(`${socket.id} joined room ${data.room}`);
   });
 
   socket.on("logBid", data => {
@@ -47,8 +47,7 @@ io.sockets.on("connection", socket => {
       bid: data.buyer.bid,
       room: "chat" + killData.buyer + killData.seller
     };
-
-    io.in(data.room).emit("endSession", saleData);
+    io.in(data.room).emit("pleaseExit", killData);
     console.log(`Buyer ${saleData.buyer} Seller ${saleData.seller}`);
     io.to(`${saleData.buyer}`).emit("enterChatMode", saleData);
     socket.emit("enterChatMode", saleData);
@@ -63,11 +62,13 @@ io.sockets.on("connection", socket => {
   });
   //Disconnect all buyers except highest bidder and seller
   socket.on("killMe", data => {
+    console.log(`${socket.id} left room ${data}`);
     socket.leave(data);
   });
 
   //Chat events
   socket.on("newMessage", data => {
+    socket.to(data.room).emit("newMessageFromServer", data);
     console.log(data);
   });
 });

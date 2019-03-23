@@ -6,13 +6,13 @@ let sellerRoom;
 let bidData = [];
 let highestBid;
 let chatRoom;
-// $().ready(() => {
-//   $("#sellerDiv").hide();
-//   $("#buyerDiv").hide();
-//   $("#bidDiv").hide();
-//   $("#chatDiv").hide();
-//   $("#chooseBuyerTd").hide();
-// });
+$().ready(() => {
+  $("#sellerDiv").hide();
+  $("#buyerDiv").hide();
+  $("#bidDiv").hide();
+  $("#chatDiv").hide();
+  $("#chooseBuyerTd").hide();
+});
 document.getElementById("buyerBtn").addEventListener("click", () => {
   user = "Buyer";
   document.getElementById("sellerBtn").disabled = true;
@@ -34,6 +34,7 @@ document.getElementById("sellerBtn").addEventListener("click", () => {
 });
 document.getElementById("chooseBuyer").addEventListener("click", () => {
   if (socket) {
+    console.log(sellerRoom);
     socket.emit("buyerChoose", { buyer: highestBid, room: sellerRoom });
   }
 });
@@ -60,7 +61,7 @@ function connectIO() {
           buyer: socket.id,
           bid: document.getElementById("bidAmount").value
         };
-        if (logData.bid != "") {
+        if (logData.bid != "" && sellerRoom != "") {
           bidData.push(logData);
           console.log(logData);
           socket.emit("logBid", { bids: bidData, bid: logData });
@@ -78,21 +79,11 @@ function connectIO() {
         $("#bidLog").slideUp();
         $("#chatDiv").slideDown();
       });
-      socket.on("endSession", data => {
-        if (socket.id != data.buyer && socket.id != data.seller) {
-          console.log(data);
-          window.location.href = "http://localhost:3001";
-          socket.emit("killMe", sellerRoom);
-        }
-      });
-      socket.on("enterChatMode", data => {
-        console.log("CHAT");
-        enterChatMode(data);
-      });
     } else if (user == "Seller") {
       $("#chooseBuyerTd").fadeIn();
+      sellerRoom = "Seller" + Math.trunc(Math.random() * 100);
       socket.emit("createSeller", {
-        name: "Seller" + Math.trunc(Math.random() * 100)
+        name: sellerRoom
       });
       socket.on("getBids", data => {
         bidData = data;
@@ -104,11 +95,23 @@ function connectIO() {
         addBid(data.bid);
         console.log(data);
       });
-      socket.on("enterChatMode", data => {
-        console.log("CHAT");
-        enterChatMode(data);
-      });
     }
+    socket.on("pleaseExit", data => {
+      console.log(data);
+      if (socket.id != data.buyer && socket.id != data.seller) {
+        console.log(data);
+        window.location.href = "http://localhost:3001";
+        socket.emit("killMe", sellerRoom);
+      }
+    });
+    socket.on("enterChatMode", data => {
+      console.log("CHAT");
+      enterChatMode(data);
+    });
+    socket.on("newMessageFromServer", data => {
+      addOtherMessage(data);
+      document.getElementById("msgText").value = "";
+    });
   }
 }
 function enterChatMode(data) {
@@ -120,7 +123,43 @@ function enterChatMode(data) {
   $("#sellerDiv").slideUp();
   $("#highestBidDiv").slideUp();
   $("#chatDiv").slideDown();
+  document.getElementById("sendMsg").addEventListener("click", () => {
+    if (socket) {
+      let msgBody = {
+        msg: document.getElementById("msgText").value,
+        room: chatRoom,
+        sender: socket.id
+      };
+      if (msgBody.value != "") {
+        socket.emit("newMessage", msgBody);
+        addMyMessage(msgBody);
+        document.getElementById("msgText").value = "";
+      }
+    }
+  });
 }
+
+function addMyMessage(data) {
+  let chatDiv = document.getElementById("chatLog");
+  $("#chatDiv").append(
+    "<div class='bg-light rounded p-1'> <p class='pull-right'>" +
+      "<span class='font-weight-bold'>Me: </span>: " +
+      data.msg +
+      "</p></div>"
+  );
+}
+function addOtherMessage(data) {
+  let chatDiv = document.getElementById("chatLog");
+  $("#chatDiv").append(
+    "<div class='bg-dark text-white rounded p-1'> <p class='pull-left'>" +
+      "<span class='font-weight-bold'>" +
+      data.sender +
+      "</span>: " +
+      data.msg +
+      "</p></div>"
+  );
+}
+
 function addSellers(sellerData) {
   let sellerDiv = document.getElementById("buyerDiv");
   sellerData.forEach(seller => {
@@ -130,7 +169,7 @@ function addSellers(sellerData) {
       p.classList.add("btn");
       p.classList.add("btn-warning");
       p.addEventListener("click", () => {
-        socket.emit("joinSeller", { seller: seller });
+        socket.emit("joinSeller", { room: seller, sellerID: seller });
         sellerRoom = seller;
         console.log(seller);
       });
