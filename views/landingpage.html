@@ -1,43 +1,65 @@
 <!DOCTYPE html>
 <html>
-  <link
-    href="https://fonts.googleapis.com/css?family=Margarine"
-    rel="stylesheet"
-  />
+    <link href="https://fonts.googleapis.com/css?family=Signika" rel="stylesheet">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
   />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
   <style>
     #home {
-      background-color: rgb(127, 177, 51);
+     
       text-align: center;
       color: #fff;
       padding: 10%;
       font-weight: bold;
       font-size: 30px;
-      font-family: "Margarine", cursive;
-      height: 50%;
+      height: 100%;
+      
+      /* background: rgb(169, 230, 153);
+      background: linear-gradient(
+        90deg,
+        rgba(169, 230, 153, 0.9587185215883228) 0%,
+        rgba(134, 245, 12, 1) 29%,
+        rgba(40, 156, 61, 1) 100%
+      ); */
+      
     }
 
     * {
       padding: 0%;
       margin: 0%;
       text-decoration: none;
+      font-family: 'Signika', sans-serif;
+    }
+    body{
+        background: #a8ff78;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #78ffd6, #a8ff78);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #78ffd6, #a8ff78); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+      background-repeat: no-repeat;
+      height: 100%;
+      padding-bottom:35%; 
+      padding-left: 10%;
+      padding-right:10%;
+      padding-top: 10%;
     }
 
     .left {
       float: left;
-      width: 50%;
-      background-color: rgb(89, 133, 39);
+      width: auto;
+     
       height: 50%;
     }
     .right {
       float: right;
-      width: 50%;
-      background-color: white;
+      width: auto;
+     
       height: 50%;
       color: black;
     }
@@ -59,100 +81,74 @@
       animation: shake 0.5s;
       animation-iteration-count: infinite;
     }
+    .content {
+  text-align: center;
+  padding-top: 15%;
+}
+button{
+    
+    font-size: 20px;
+    margin: 200px ;
+    width: 100px;
+    align-self: center;
+    padding: 2%;
+    border-radius:4px;
+    border:none; 
+    -webkit-transition-duration: 1s; /* Safari */
+  transition-duration: 1s;
+  
+    
+}
+button:hover{
+    background-color:  darkgreen;
+
+}
+.col-xs-3 {
+  margin-top: 25px;
+}
+
+hr {
+  border: 0;
+  width: 75%;
+  height: 2px;
+  margin-top: 40px;
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 255, 255, 0)
+  );
+}
+#title{
+    color: black;
+}
   </style>
 
   <head> </head>
   <body scroll="no" style="overflow:hidden">
     <div class="container container-fluid">
       <div id="home">
-        <h1>
+        <h1 id="title">KRISHI SAHAYAK</h1>
+        <h2>
           <a
             href=""
             class="typewrite jumbotron"
             data-period="2000"
-            data-type='[ " THE ADVISOR", "THE SELLERS", "THE BUYERS ", "KRISHI SAHAYAK" ]'
+            data-type='[ " THE ADVISOR", "THE SELLERS", "THE BUYERS ",  ]'
           >
             <span class="wrap"></span>
           </a>
-        </h1>
+        </h2>
+        <hr>
       </div>
-      <div>
-        <div class="left">
-          <img src="bazaar.jpg" class="logo" />
-          <div class="subtext">
-            <h2>BAZAAR</h2>
-            <p>A place where the farmers and buyers meet.</p>
-          </div>
-        </div>
-        <div class="right">
-          <img src="farmers.jpg" class="logo" />
-          <div class="subtext">
-            <h2><a href="weather.html">KRISHI SAHAYAK</a></h2>
-            <p>A friend to the farmer.</p>
-          </div>
-        </div>
-      </div>
+          <a href="#"><button class = "btn btn-primary btn-lg col-xs-3 left" style="display:inline-block">Bazaar</button></a>
+      
+      
+          <a href="weather.html"><button class = "btn btn-primary btn-lg col-xs-3 right" style="display:inline-block">Krishi Sahayak</button></a>
+      
+      
+  </div>
     </div>
   </body>
-  <script>
-    var TxtType = function(el, toRotate, period) {
-      this.toRotate = toRotate;
-      this.el = el;
-      this.loopNum = 0;
-      this.period = parseInt(period, 10) || 2000;
-      this.txt = "";
-      this.tick();
-      this.isDeleting = false;
-    };
-
-    TxtType.prototype.tick = function() {
-      var i = this.loopNum % this.toRotate.length;
-      var fullTxt = this.toRotate[i];
-
-      if (this.isDeleting) {
-        this.txt = fullTxt.substring(0, this.txt.length - 1);
-      } else {
-        this.txt = fullTxt.substring(0, this.txt.length + 1);
-      }
-
-      this.el.innerHTML = '<span class="wrap">' + this.txt + "</span>";
-
-      var that = this;
-      var delta = 200 - Math.random() * 100;
-
-      if (this.isDeleting) {
-        delta /= 2;
-      }
-
-      if (!this.isDeleting && this.txt === fullTxt) {
-        delta = this.period;
-        this.isDeleting = true;
-      } else if (this.isDeleting && this.txt === "") {
-        this.isDeleting = false;
-        this.loopNum++;
-        delta = 500;
-      }
-
-      setTimeout(function() {
-        that.tick();
-      }, delta);
-    };
-
-    window.onload = function() {
-      var elements = document.getElementsByClassName("typewrite");
-      for (var i = 0; i < elements.length; i++) {
-        var toRotate = elements[i].getAttribute("data-type");
-        var period = elements[i].getAttribute("data-period");
-        if (toRotate) {
-          new TxtType(elements[i], JSON.parse(toRotate), period);
-        }
-      }
-      // INJECT CSS
-      var css = document.createElement("style");
-      css.type = "text/css";
-      css.innerHTML =
-        ".typewrite > .wrap { border-right: 0.08em solid #fff; color:#fff;}";
-      document.body.appendChild(css);
-    };
-  </script>
+  
 </html>
